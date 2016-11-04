@@ -1,0 +1,14 @@
+@import "../../node_modules/fixed-data-table/dist/fixed-data-table.css";
+@import "_fonts.css";
+
+html, body {
+  font-family: 'Open Sans';
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.log-data {
+  font-family: 'Inconsolata';
+}
