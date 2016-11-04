@@ -1,8 +1,8 @@
 {
   "name": "quark-logger",
   "version": "0.0.2",
-  "description": "Node.js Logger atop Electron",
-  "main": "./dist/quark.bindle.js",
+  "description": "Node.js logger built atop Electron",
+  "main": "./dist/quark.bundle.js",
   "scripts": {
     "start": "webpack -w",
     "build": "webpack -p",
