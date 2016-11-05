@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Quark Example</title>
+</head>
+<body>
+  <h1>Quark Example</h1>
+  <script>
+    const quark = require('../dist/quark.bundle.js')('example:renderer')
+    setInterval(() => quark(`Renderer process #${process.pid}`), 1000)
+  </script>
+</body>
+</html>
