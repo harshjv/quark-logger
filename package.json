@@ -1,6 +1,6 @@
 {
   "name": "quark-logger",
-  "version": "0.0.5",
+  "version": "0.0.6-alpha",
   "description": "Node.js logger built atop Electron",
   "main": "./dist/quark.bundle.js",
   "scripts": {
@@ -26,6 +26,7 @@
     "babel-preset-react": "^6.16.0",
     "babel-preset-stage-0": "^6.16.0",
     "css-loader": "^0.25.0",
+    "debug": "^2.2.0",
     "deep-merge": "^1.0.0",
     "file-loader": "^0.9.0",
     "fixed-data-table": "^0.6.3",

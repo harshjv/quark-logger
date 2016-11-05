@@ -1,7 +1,11 @@
+import Debug from 'debug'
+
 import path from 'path'
 import xtend from 'xtend'
 import { spawn } from 'child_process'
 import { parse } from 'shell-quote'
+
+const debug = Debug('quark-logger:stream')
 
 const { platform, env } = process
 
@@ -18,7 +22,19 @@ const handleQuotes = (s) => {
   return String(s).replace(/([\\$`()!#&*|])/g, '\\$1')
 }
 
-const pathToNPMBinDirectory = () => path.resolve(__dirname, '..', 'node_modules/.bin')
+const getNewPathVariable = () => {
+  let PATH = env[PATH_KEY]
+  let result = []
+  let cwd = process.cwd()
+  let parent
+
+  while (true) {
+    parent = path.join(cwd, '..')
+    result.push(path.join(cwd, 'node_modules/.bin'))
+    if (parent === cwd) return result.concat(PATH).join(PATH_SEP)
+    cwd = parent
+  }
+}
 
 const formatAndSpawn = (command, opts) => {
   const options = xtend({}, opts)
@@ -40,6 +56,8 @@ const formatAndSpawn = (command, opts) => {
     delete options.shell
   }
 
+  debug('Spawning electron', file, args, options)
+
   return spawn(file, args, options)
 }
 
@@ -48,7 +66,7 @@ const handleSpawningInMainProcess = () => {
   const parsed = parse(ELECTRON_LIB, xtend({ '': '$' }), { escape: ESCAPE_CHAR }).map(commandToString).join(' ')
 
   const overridePATH = {
-    [ PATH_KEY ]: [ pathToNPMBinDirectory(), env[PATH_KEY] ].join(PATH_SEP)
+    [ PATH_KEY ]: getNewPathVariable()
   }
 
   const child = formatAndSpawn(parsed, { env: xtend(env, overridePATH) })
@@ -67,17 +85,22 @@ const handleSpawningInMainProcess = () => {
 module.exports = () => {
   if (typeof process === 'undefined') {
     // Web browser
+    debug('Web browser')
 
     return console.log.bind(console)
   } else {
     if (process.type === 'renderer') {
       // Renderer process
+      debug('Electron renderer process')
+
       const { ipcRenderer } = require('electron')
 
       return (log) => ipcRenderer.send('quark-logger:ipc', log)
     } else {
       if (process.versions.electron) {
         // Electron
+        debug('Electron main process')
+
         const { ipcMain } = require('electron')
 
         let logger = handleSpawningInMainProcess()
@@ -89,6 +112,7 @@ module.exports = () => {
         return logger
       } else {
         // Node.js
+        debug('Node.js process')
 
         return handleSpawningInMainProcess()
       }
