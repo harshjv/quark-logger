@@ -4,21 +4,31 @@
 
 ## Installation
 
-npm install --save quark-logger
+    npm install --save quark-logger
 
 
 ## Usage
 
-    const Quark = require('quark-logger')
-    const quark = Quark('example:main')
+To log something, in ***main*** process file or in ***rendering*** process;
 
-    quark('log something')
+    const quark = require('quark-logger')('example:main')
 
     // ..
     // ...
     // ..
 
-    Quark.showWindow.show() // to show logs in a window
+    quark('log something')
+
+
+And, somewhere in the main process file;
+
+    const Quark = require('quark-logger')
+
+    // ..
+    // ...
+    // ..
+
+    Quark.showWindow.show() // to bring up the Quark Logging Window
 
 
 ## License
