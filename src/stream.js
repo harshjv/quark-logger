@@ -5,6 +5,8 @@ import xtend from 'xtend'
 import { spawn } from 'child_process'
 import { parse } from 'shell-quote'
 
+let activatedWindow = false
+
 const debug = Debug('quark-logger:stream')
 
 const { platform, env } = process
@@ -62,24 +64,31 @@ const formatAndSpawn = (command, opts) => {
 }
 
 const handleSpawningInMainProcess = () => {
-  let out
-  const parsed = parse(ELECTRON_LIB, xtend({ '': '$' }), { escape: ESCAPE_CHAR }).map(commandToString).join(' ')
-
-  const overridePATH = {
-    [ PATH_KEY ]: getNewPathVariable()
+  function Out (logs) {
+    activatedWindow ? activatedWindow(logs) : console.log(logs)
   }
 
-  const child = formatAndSpawn(parsed, { env: xtend(env, overridePATH) })
-  out = child.stdin.write.bind(child.stdin)
+  Out.showWindow = function () {
+    if (activatedWindow) return
 
-  child.stdin.setEncoding('utf-8')
-  child.stdout.pipe(process.stdout)
+    const parsed = parse(ELECTRON_LIB, xtend({ '': '$' }), { escape: ESCAPE_CHAR }).map(commandToString).join(' ')
 
-  child.on('exit', () => {
-    out = console.log.bind(console)
-  })
+    const overridePATH = {
+      [ PATH_KEY ]: getNewPathVariable()
+    }
 
-  return (log) => out(log)
+    const child = formatAndSpawn(parsed, { env: xtend(env, overridePATH) })
+    activatedWindow = child.stdin.write.bind(child.stdin)
+
+    child.stdin.setEncoding('utf-8')
+    child.stdout.pipe(process.stdout)
+
+    child.on('exit', () => {
+      activatedWindow = console.log.bind(console)
+    })
+  }
+
+  return Out
 }
 
 module.exports = () => {
@@ -97,25 +106,18 @@ module.exports = () => {
 
       return (log) => ipcRenderer.send('quark-logger:ipc', log)
     } else {
-      if (process.versions.electron) {
-        // Electron
-        debug('Electron main process')
+      // Electron
+      debug('Electron main process')
 
-        const { ipcMain } = require('electron')
+      const { ipcMain } = require('electron')
 
-        let logger = handleSpawningInMainProcess()
+      let logger = handleSpawningInMainProcess()
 
-        ipcMain.on('quark-logger:ipc', (event, arg) => {
-          logger(arg)
-        })
+      ipcMain.on('quark-logger:ipc', (event, arg) => {
+        logger(arg)
+      })
 
-        return logger
-      } else {
-        // Node.js
-        debug('Node.js process')
-
-        return handleSpawningInMainProcess()
-      }
+      return logger
     }
   }
 }

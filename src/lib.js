@@ -5,7 +5,7 @@ let previousTime
 const coerce = (val) => val instanceof Error ? val.stack || val.message : val
 const log = stream()
 
-module.exports = (namespace) => {
+const Quark = (namespace) => {
   return (...args) => {
     const currentTime = new Date()
     const diff = currentTime - (previousTime || currentTime)
@@ -21,3 +21,7 @@ module.exports = (namespace) => {
     }))
   }
 }
+
+Quark.quarkWindow = { show () { log.showWindow() } }
+
+module.exports = Quark

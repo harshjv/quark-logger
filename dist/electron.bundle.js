@@ -1,2 +1,123 @@
-!function(e,t){if("object"==typeof exports&&"object"==typeof module)module.exports=t(require("electron"),require("path"));else if("function"==typeof define&&define.amd)define(["electron","path"],t);else{var o="object"==typeof exports?t(require("electron"),require("path")):t(e.electron,e.path);for(var n in o)("object"==typeof exports?exports:e)[n]=o[n]}}(this,function(e,t){return function(e){function t(n){if(o[n])return o[n].exports;var r=o[n]={exports:{},id:n,loaded:!1};return e[n].call(r.exports,r,r.exports,t),r.loaded=!0,r.exports}var o={};return t.m=e,t.c=o,t.p="",t(0)}({0:function(e,t,o){"use strict";function n(e){return e&&e.__esModule?e:{default:e}}var r=o(69),i=n(r),c=o(24),s=o(141),u=n(s);process.stdin.resume(),process.stdin.setEncoding("utf8"),c.app.on("ready",function(){var e=new c.BrowserWindow({width:800,height:600,fullscreen:!1,fullscreenable:!0,resizable:!0});e.on("closed",function(){e=null}),e.loadURL("file://"+i.default.join(__dirname,u.default)),e.webContents.once("did-finish-load",function(){process.stdin.on("data",function(t){try{var o=JSON.parse(t);e.webContents.send("log",o)}catch(e){console.error(t)}})})})},24:function(e,t){e.exports=require("electron")},69:function(e,t){e.exports=require("path")},141:function(e,t,o){e.exports=o.p+"f64731696c57c039fec743c5580d6040.html"}})});
+(function webpackUniversalModuleDefinition(root, factory) {
+	if(typeof exports === 'object' && typeof module === 'object')
+		module.exports = factory(require("path"), require("electron"));
+	else if(typeof define === 'function' && define.amd)
+		define(["path", "electron"], factory);
+	else {
+		var a = typeof exports === 'object' ? factory(require("path"), require("electron")) : factory(root["path"], root["electron"]);
+		for(var i in a) (typeof exports === 'object' ? exports : root)[i] = a[i];
+	}
+})(this, function(__WEBPACK_EXTERNAL_MODULE_1__, __WEBPACK_EXTERNAL_MODULE_2__) {
+return /******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+/******/
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId])
+/******/ 			return installedModules[moduleId].exports;
+/******/
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			exports: {},
+/******/ 			id: moduleId,
+/******/ 			loaded: false
+/******/ 		};
+/******/
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/
+/******/ 		// Flag the module as loaded
+/******/ 		module.loaded = true;
+/******/
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/
+/******/
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+/******/
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+/******/
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "";
+/******/
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(0);
+/******/ })
+/************************************************************************/
+/******/ ([
+/* 0 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var _path = __webpack_require__(1);
+	
+	var _path2 = _interopRequireDefault(_path);
+	
+	var _electron = __webpack_require__(2);
+	
+	var _index = __webpack_require__(3);
+	
+	var _index2 = _interopRequireDefault(_index);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	process.stdin.resume();
+	process.stdin.setEncoding('utf8');
+	
+	_electron.app.on('ready', function () {
+	  var win = new _electron.BrowserWindow({
+	    width: 800,
+	    height: 600,
+	    fullscreen: false,
+	    fullscreenable: true,
+	    resizable: true
+	  });
+	
+	  win.on('closed', function () {
+	    win = null;
+	  });
+	
+	  win.loadURL('file://' + _path2.default.join(__dirname, _index2.default));
+	
+	  win.webContents.once('did-finish-load', function () {
+	    process.stdin.on('data', function (data) {
+	      try {
+	        var parsedData = JSON.parse(data);
+	        win.webContents.send('log', parsedData);
+	      } catch (e) {
+	        console.error(data);
+	      }
+	    });
+	  });
+	});
+
+/***/ },
+/* 1 */
+/***/ function(module, exports) {
+
+	module.exports = require("path");
+
+/***/ },
+/* 2 */
+/***/ function(module, exports) {
+
+	module.exports = require("electron");
+
+/***/ },
+/* 3 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__.p + "f64731696c57c039fec743c5580d6040.html";
+
+/***/ }
+/******/ ])
+});
+;
 //# sourceMappingURL=electron.bundle.js.map

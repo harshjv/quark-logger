@@ -1,6 +1,7 @@
 const path = require('path')
 
-const quark = require('../dist/quark.bundle.js')('example:main')
+const Quark = require('../dist/quark.bundle.js')
+const quark = Quark('example:main')
 const { app, BrowserWindow } = require('electron')
 
 const createAndLaunchWindow = () => {
@@ -18,6 +19,10 @@ const createAndLaunchWindow = () => {
 
 app.on('ready', () => {
   setInterval(() => quark(`Hello from Electron main process #${process.pid}`), 1000)
+
+  setTimeout(() => {
+    Quark.quarkWindow.show()
+  }, 5000)
 
   createAndLaunchWindow()
   createAndLaunchWindow()
