@@ -5,7 +5,8 @@ import xtend from 'xtend'
 import { spawn } from 'child_process'
 import { parse } from 'shell-quote'
 
-let activatedWindow = false
+let logger = console.log.bind(console)
+let quarkWindowVisible = false
 
 const debug = Debug('quark-logger:stream')
 
@@ -65,11 +66,11 @@ const formatAndSpawn = (command, opts) => {
 
 const handleSpawningInMainProcess = () => {
   function Out (logs) {
-    activatedWindow ? activatedWindow(logs) : console.log(logs)
+    logger(logs)
   }
 
   Out.showWindow = function () {
-    if (activatedWindow) return
+    if (quarkWindowVisible) return
 
     const parsed = parse(ELECTRON_LIB, xtend({ '': '$' }), { escape: ESCAPE_CHAR }).map(commandToString).join(' ')
 
@@ -78,13 +79,15 @@ const handleSpawningInMainProcess = () => {
     }
 
     const child = formatAndSpawn(parsed, { env: xtend(env, overridePATH) })
-    activatedWindow = child.stdin.write.bind(child.stdin)
+    logger = child.stdin.write.bind(child.stdin)
 
     child.stdin.setEncoding('utf-8')
     child.stdout.pipe(process.stdout)
 
+    quarkWindowVisible = true
+
     child.on('exit', () => {
-      activatedWindow = console.log.bind(console)
+      logger = console.log.bind(console)
     })
   }
 
@@ -113,9 +116,7 @@ module.exports = () => {
 
       let logger = handleSpawningInMainProcess()
 
-      ipcMain.on('quark-logger:ipc', (event, arg) => {
-        logger(arg)
-      })
+      ipcMain.on('quark-logger:ipc', (event, arg) => logger(arg))
 
       return logger
     }
