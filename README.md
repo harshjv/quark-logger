@@ -28,7 +28,7 @@ And, somewhere in the main process file;
     // ...
     // ..
 
-    Quark.showWindow.show() // to bring up the Quark Logging Window
+    Quark.quarkWindow.show() // to bring up the Quark Logging Window
 
 
 ## License
