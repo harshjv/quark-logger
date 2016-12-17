@@ -31,6 +31,11 @@ And, somewhere in the main process file;
     Quark.quarkWindow.show() // to bring up the Quark Logging Window
 
 
+## Run example
+
+    npm run example
+
+
 ## License
 
 MIT

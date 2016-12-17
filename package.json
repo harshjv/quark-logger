@@ -7,7 +7,8 @@
     "start": "webpack -w",
     "build": "webpack -p",
     "test": "standard",
-    "prepublish": "npm test && npm run build"
+    "prepublish": "npm test && npm run build",
+    "example": "electron example/main.js"
   },
   "repository": "https://github.com/harshjv/quark-logger",
   "author": {
