@@ -20,9 +20,7 @@ const createAndLaunchWindow = () => {
 app.on('ready', () => {
   setInterval(() => quark(`Hello from Electron main process #${process.pid}`), 1000)
 
-  setTimeout(() => {
-    Quark.quarkWindow.show()
-  }, 5000)
+  setTimeout(() => Quark.quarkWindow.show(), 5000)
 
   createAndLaunchWindow()
   createAndLaunchWindow()

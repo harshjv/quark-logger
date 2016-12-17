@@ -7,8 +7,11 @@
 <body>
   <h1>Quark Example</h1>
   <script>
-    const quark = require('../dist/quark.bundle.js')('example:renderer')
+    const Quark = require('../dist/quark.bundle.js')
+    const quark = Quark('example:renderer')
     setInterval(() => quark(`Renderer process #${process.pid}`), 1000)
+
+    setTimeout(() => Quark.quarkWindow.show(), 5000)
   </script>
 </body>
 </html>
