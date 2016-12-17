@@ -107,7 +107,16 @@ module.exports = () => {
 
       const { ipcRenderer } = require('electron')
 
-      return (log) => ipcRenderer.send('quark-logger:ipc', log)
+      const Out = function (logs) {
+        console.log(logs)
+        ipcRenderer.send('quark-logger:ipc', logs)
+      }
+
+      Out.showWindow = function () {
+        ipcRenderer.send('quark-logger:show-quark-window')
+      }
+
+      return Out
     } else {
       // Electron
       debug('Electron main process')
@@ -115,6 +124,10 @@ module.exports = () => {
       const { ipcMain } = require('electron')
 
       let logger = handleSpawningInMainProcess()
+
+      ipcMain.on('quark-logger:show-quark-window', (event, arg) => {
+        logger.showWindow()
+      })
 
       ipcMain.on('quark-logger:ipc', (event, arg) => logger(arg))
 

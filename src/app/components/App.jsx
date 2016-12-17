@@ -11,6 +11,7 @@ export default class App extends React.Component {
     this.state = {
       logs: [],
       query: {
+        pid: '',
         tag: '',
         data: ''
       },
@@ -78,6 +79,20 @@ export default class App extends React.Component {
         <Column
           header={
             <Cell>
+              PID <input type='text' onChange={this._onFilterChange('pid')} placeholder='Filter (number)' />
+            </Cell>
+          }
+          cell={({rowIndex, ...props}) => (
+            <Cell {...props} className='log-data'>
+              {this.state.logs[rowIndex].pid}
+            </Cell>
+          )}
+          width={100}
+          flexGrow={1}
+        />
+        <Column
+          header={
+            <Cell>
               Time
             </Cell>
           }
@@ -93,7 +108,7 @@ export default class App extends React.Component {
         <Column
           header={
             <Cell>
-              Tag <input onChange={this._onFilterChange('tag')} placeholder='Filter (RegEx)' />
+              Tag <input type='text' onChange={this._onFilterChange('tag')} placeholder='Filter (RegEx)' />
             </Cell>
           }
           cell={({rowIndex, ...props}) => (
@@ -107,7 +122,7 @@ export default class App extends React.Component {
         <Column
           header={
             <Cell>
-              Data <input onChange={this._onFilterChange('data')} placeholder='Filter (RegEx)' />
+              Data <input type='text' onChange={this._onFilterChange('data')} placeholder='Filter (RegEx)' />
             </Cell>
           }
           cell={({rowIndex, ...props}) => (

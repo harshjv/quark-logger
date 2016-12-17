@@ -27,16 +27,18 @@ class LogStoreClass extends BaseStore {
   }
 
   getLogs (query) {
-    if (query.tag === '' && query.data === '') {
+    if (query.pid === '' && query.tag === '' && query.data === '') {
       return this.logs
     }
 
+    const pidPattern = query.pid !== '' ? query.pid : true
     const tagPattern = query.tag !== '' ? new RegExp(sanitizeQuery(query.tag), 'i') : true
     const dataPattern = query.data !== '' ? new RegExp(sanitizeQuery(query.data), 'i') : true
     const filteredLogs = []
 
     for (let log of this.logs) {
-      if ((tagPattern === true || tagPattern.test(log.tag)) &&
+      if ((pidPattern === true || pidPattern === `${log.pid}`) &&
+          (tagPattern === true || tagPattern.test(log.tag)) &&
           (dataPattern === true || dataPattern.test(log.data))) {
         filteredLogs.push(log)
       }
